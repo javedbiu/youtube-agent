@@ -1,0 +1,33 @@
+{
+  "title": "How the Romans Built Roads That Still Exist Today",
+  "thumbnail_text": "2,000 Years Old",
+  "description": "Some Roman roads are more than 2,000 years old, and people still walk on them. How did an empire without machines build roads that outlasted the empire itself?\n\nIn this video we dig into the layers under a Roman road, the engineering tricks that kept water out, and why roads were the real secret of Roman power.",
+  "tags": ["roman roads", "ancient rome", "roman engineering", "via appia", "history explained", "ancient engineering"],
+  "sources": [
+    "https://en.wikipedia.org/wiki/Roman_roads",
+    "https://en.wikipedia.org/wiki/Appian_Way",
+    "https://www.britannica.com/technology/road/Roman-roads"
+  ],
+  "uncertain_claims": [
+    "The four named layers come from Vitruvius, who described floors; not every road was built this way.",
+    "Network length estimates vary between sources (about 80,000 km paved is the common figure)."
+  ],
+  "contains_synthetic_media": false,
+  "scenes": [
+    {"narration": "In Italy, there is a road you can still walk on that was started more than two thousand three hundred years ago.", "footage_query": "ancient stone road", "on_screen_text": "Started in 312 BC"},
+    {"narration": "No asphalt, no machines, no steel. So how did the Romans build roads that outlasted the empire itself?", "footage_query": "roman ruins", "on_screen_text": ""},
+    {"narration": "The road is the Via Appia, the Appian Way. It was begun in 312 BC to move soldiers south from Rome.", "footage_query": "appian way rome", "on_screen_text": "The Via Appia"},
+    {"narration": "And that is the first secret. Roman roads were not built for trade or travel. They were built for armies.", "footage_query": "marching soldiers", "on_screen_text": "Built for armies"},
+    {"narration": "A legion that could march fast could control land far away. Roads turned distance into power.", "footage_query": "italian countryside aerial", "on_screen_text": ""},
+    {"narration": "To build one, engineers first dug a trench, sometimes more than a metre deep, down to firm ground.", "footage_query": "digging trench soil", "on_screen_text": "Dig to firm ground"},
+    {"narration": "Then they filled it in layers. Large stones at the bottom, then smaller rubble, then gravel packed with lime.", "footage_query": "stones gravel construction", "on_screen_text": "Big stones, then rubble"},
+    {"narration": "On top went tightly fitted paving stones, cut so closely that the joints were barely visible.", "footage_query": "cobblestone pavement close up", "on_screen_text": "Fitted paving stones"},
+    {"narration": "The real enemy of any road is water. Water gets in, freezes, and cracks the surface from below.", "footage_query": "rain on stone street", "on_screen_text": "The enemy: water"},
+    {"narration": "So the Romans curved the surface, higher in the middle, and dug ditches on both sides. Rain simply ran away.", "footage_query": "rain drainage street", "on_screen_text": "Curved for drainage"},
+    {"narration": "They also built as straight as the land allowed, using simple surveying tools and a lot of patience.", "footage_query": "long straight road landscape", "on_screen_text": ""},
+    {"narration": "At its peak, the empire had roughly eighty thousand kilometres of paved roads, from Britain to the Middle East.", "footage_query": "old map europe", "on_screen_text": "About 80,000 km paved"},
+    {"narration": "Stone markers along the way told travellers the distance. Many of these milestones still survive in museums.", "footage_query": "ancient stone column", "on_screen_text": ""},
+    {"narration": "So why do some of these roads still exist? Deep foundations, good drainage, and stone that does not rot.", "footage_query": "old stone road sunset", "on_screen_text": "Why they lasted"},
+    {"narration": "The empire fell. The roads stayed. And many of Europe's modern highways still follow the lines Roman engineers drew.", "footage_query": "highway aerial europe", "on_screen_text": ""}
+  ]
+}
