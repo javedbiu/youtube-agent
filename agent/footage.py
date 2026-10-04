@@ -1,16 +1,19 @@
 """Finds and downloads free, monetization-safe stock footage, logging the license of every clip.
 
-Sources: Pexels and Pixabay. Both licenses allow commercial use and editing
-(https://www.pexels.com/license/, https://pixabay.com/service/license-summary/).
+Sources, tried in this order:
+  Pexels and Pixabay (need free API keys; both licenses allow commercial use and editing)
+  NASA media library and Wikimedia Commons (no key; public domain, CC0 and CC BY files only)
 """
 
 import hashlib
 import os
+import re
 import subprocess
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import requests
+from urllib.parse import quote
 
 CACHE = Path("cache/footage")
 
@@ -85,6 +88,60 @@ def _pixabay(query: str, used: set[str]) -> Clip | None:
     return None
 
 
+HEADERS = {"User-Agent": "youtube-agent/1.0 (https://github.com/javedbiu/youtube-agent)"}
+
+
+def _nasa(query: str, used: set[str]) -> Clip | None:
+    """NASA media library. No key needed; NASA media is generally public domain."""
+    r = requests.get("https://images-api.nasa.gov/search",
+                     params={"q": query, "media_type": "video"}, headers=HEADERS, timeout=30)
+    r.raise_for_status()
+    for item in r.json()["collection"]["items"][:10]:
+        meta = item["data"][0]
+        page = f"https://images.nasa.gov/details/{quote(meta['nasa_id'])}"
+        if page in used:
+            continue
+        assets = requests.get(item["href"], headers=HEADERS, timeout=30).json()
+        mp4s = [u for u in assets if u.endswith(".mp4")]
+        pick = next((u for u in mp4s if "~medium" in u), None) or next((u for u in mp4s if "~orig" in u), None)
+        if not pick:
+            continue
+        safe_id = re.sub(r"[^A-Za-z0-9_-]", "_", meta["nasa_id"])[:60]
+        path = _download(pick.replace("http://", "https://"), CACHE / f"nasa_{safe_id}.mp4")
+        creator = meta.get("center") or "NASA"
+        return Clip(str(path), "NASA", page, f"NASA {creator}".strip(), "Public domain (NASA media)", query)
+    return None
+
+
+# Only licenses that allow both commercial use and edits, without share-alike obligations.
+_SAFE_LICENSE = re.compile(r"^(cc0|public domain|pd\b|pd-|cc by \d)", re.I)
+
+
+def _wikimedia(query: str, used: set[str]) -> Clip | None:
+    """Wikimedia Commons videos. No key needed; keeps only public domain, CC0 and CC BY files."""
+    r = requests.get("https://commons.wikimedia.org/w/api.php", headers=HEADERS, timeout=30, params={
+        "action": "query", "format": "json", "generator": "search", "gsrnamespace": 6,
+        "gsrsearch": f"{query} filetype:video", "gsrlimit": 20,
+        "prop": "imageinfo", "iiprop": "url|size|extmetadata",
+    })
+    r.raise_for_status()
+    pages = sorted(r.json().get("query", {}).get("pages", {}).values(), key=lambda p: p.get("index", 0))
+    for p in pages:
+        info = (p.get("imageinfo") or [{}])[0]
+        meta = info.get("extmetadata", {})
+        lic = meta.get("LicenseShortName", {}).get("value", "")
+        page = info.get("descriptionurl", "")
+        if not _SAFE_LICENSE.match(lic) or not page or page in used:
+            continue
+        if info.get("width", 0) < 640 or info.get("duration", 3) < 3:
+            continue
+        artist = re.sub(r"<[^>]+>", "", meta.get("Artist", {}).get("value", "")).strip() or "Unknown"
+        ext = Path(info["url"]).suffix or ".webm"
+        path = _download(info["url"], CACHE / f"wikimedia_{p['pageid']}{ext}")
+        return Clip(str(path), "Wikimedia Commons", page, artist, lic, query)
+    return None
+
+
 def placeholder(query: str, seconds: float = 10) -> Clip:
     """A plain title card, used for offline tests or when no footage is found."""
     name = hashlib.md5(query.encode()).hexdigest()[:10]
@@ -104,7 +161,7 @@ def placeholder(query: str, seconds: float = 10) -> Clip:
 
 def find_clip(query: str, used: set[str], offline: bool = False) -> Clip:
     if not offline:
-        for finder in (_pexels, _pixabay):
+        for finder in (_pexels, _pixabay, _nasa, _wikimedia):
             try:
                 clip = finder(query, used)
             except requests.RequestException as e:

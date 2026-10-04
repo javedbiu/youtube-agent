@@ -4,7 +4,7 @@ Makes a narrated history or science explainer video from one topic, using free s
 and uploads it to YouTube as **private** so you can check it before it goes public.
 
 ```
-topic -> script (Claude) -> footage (Pexels/Pixabay) -> narration -> edit (FFmpeg) -> thumbnail -> private upload
+topic -> script (Claude) -> footage (Pexels/Pixabay/NASA/Wikimedia) -> narration -> edit (FFmpeg) -> thumbnail -> private upload
 ```
 
 ## What you need
@@ -13,7 +13,7 @@ topic -> script (Claude) -> footage (Pexels/Pixabay) -> narration -> edit (FFmpe
 | --- | --- | --- |
 | Python 3.10+ and FFmpeg | Free | python.org, ffmpeg.org |
 | Claude API key | About $0.10 to $0.50 per script | console.anthropic.com |
-| Pexels API key (Pixabay optional) | Free | pexels.com/api |
+| Footage | Free, no key needed (NASA, Wikimedia Commons); Pexels and Pixabay keys optional | pexels.com/api, pixabay.com/api/docs |
 | Voice | Free (your recordings) or about $5+/month (ElevenLabs) | elevenlabs.io |
 | YouTube upload access | Free | console.cloud.google.com |
 
@@ -61,8 +61,8 @@ On Windows, use Task Scheduler with the same command.
 
 ## Rules this agent follows, and you should too
 
-- Footage only from Pexels and Pixabay, whose licenses allow commercial use and editing.
-  Never add clips licensed CC NC or ND, or "no copyright" re-uploads of films, TV or sports.
+- Footage only from Pexels, Pixabay, NASA, and Wikimedia Commons files marked public domain, CC0 or CC BY.
+  These allow commercial use and editing. Never add clips licensed CC NC, ND or SA, or "no copyright" re-uploads of films, TV or sports.
 - Every video has an original script and narration. That is what makes it monetizable under
   YouTube's reused content policy.
 - Music only from the YouTube Audio Library (set `MUSIC_FILE` in `.env`).
